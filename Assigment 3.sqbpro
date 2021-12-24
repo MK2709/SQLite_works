@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="/Users/aslankral/Desktop/sqlite/chinook.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="3284"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,13:mainvacation_plan"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="albums" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="300"/><column index="3" value="47"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="courses" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="62"/><column index="2" value="80"/><column index="3" value="62"/><column index="4" value="76"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="customers" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="68"/><column index="2" value="64"/><column index="3" value="76"/><column index="4" value="243"/><column index="5" value="221"/><column index="6" value="111"/><column index="7" value="43"/><column index="8" value="89"/><column index="9" value="73"/><column index="10" value="113"/><column index="11" value="109"/><column index="12" value="162"/><column index="13" value="78"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="employees" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="68"/><column index="2" value="59"/><column index="3" value="61"/><column index="4" value="107"/><column index="5" value="62"/><column index="6" value="118"/><column index="7" value="118"/><column index="8" value="153"/><column index="9" value="64"/><column index="10" value="34"/><column index="11" value="50"/><column index="12" value="66"/><column index="13" value="103"/><column index="14" value="103"/><column index="15" value="148"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="tracks" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="47"/><column index="2" value="300"/><column index="3" value="52"/><column index="4" value="74"/><column index="5" value="49"/><column index="6" value="300"/><column index="7" value="73"/><column index="8" value="62"/><column index="9" value="55"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="vacation_plan" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort><column index="7" mode="0"/></sort><column_widths><column index="1" value="52"/><column index="2" value="48"/><column index="3" value="77"/><column index="4" value="74"/><column index="5" value="91"/><column index="6" value="105"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 2">
+/*===================================================
+ SUBQUERIES
+====================================================*/
+
+	/* albums tablosundaki Title sutunu ‘Faceless’ olan kaydın albumid'si elde ederek 
+	tracks tablosunda bu değere eşit olan kayıtların bilgilerini SUBQUERY yazarak listeyiniz.
+	Listelemede trackid, name ve albumid bilgilerini bulunmalıdır. */
+
+	SELECT trackid, name, albumid
+	FROM tracks
+	WHERE albumid = ( 	SELECT albumid
+									FROM albums
+									WHERE title = 'Faceless');
+					
+	/* albums tablosundaki Title sutunu ‘Faceless’ olan kaydın albumid'si elde ederek 
+	tracks tablosunda bu değere eşit olan kayıtların bilgilerini JOIN kullanarak listeyiniz.
+	Listelemede trackid, name ve albumid bilgileri bulunmalıdır. */				
+	
+	SELECT t.TrackId,  t.Name,  t.AlbumId
+	FROM tracks t
+	JOIN albums a
+ ON t.AlbumId = a.AlbumId
+	WHERE a.Title = 'Faceless';
+	
+	/* albums tablosundaki Title sutunu Faceless veya Let There Be Rock olan kayıtların 
+	albumid'lerini elde ederek tracks tablosunda bu id'lere eşit olan kayıtların bilgilerini 
+	SUBQUERY kullanarak listeyiniz. Listelemede trackid, name ve albumid bilgileri bulunmalıdır. */			
+	
+	SELECT trackid,name,albumid
+	FROM tracks
+	WHERE albumid IN (	SELECT AlbumId
+									FROM albums
+									WHERE title IN ('Faceless', 'Let There Be Rock'));
+	
+	/* albums tablosundaki Title sutunu Faceless veya Let There Be Rock olan kayıtların 
+	albumid'lerini elde ederek tracks tablosunda bu id'lere eşit olan kayıtların bilgilerini 
+	JOIN kullanarak listeyiniz.Listelemede trackid, name ve albumid bilgileri bulunmalıdır. */	
+	
+	SELECT t.trackid, t.name, t.albumid
+	FROM tracks t
+	JOIN albums a
+	ON t.AlbumId=a.AlbumId
+	WHERE title IN ('Faceless', 'Let There Be Rock');
+	
+/*===================================================
+ DDL COMMANDS (CREATE TABLE, DROP TABLE,ALTER TABLE)
+====================================================*/	
+	
+	/*------------------------------------------------------------------------------------------
+	/*  CREATE TABLE
+	/*------------------------------------------------------------------------------------------
+	
+	/*personel adinda bir tablo oluşturunuz.  Tabloda first_name, last_name 
+	age(INT) ve hire_date (Date) sutunuları bulunmalıdır.
+	*/
+	CREATE TABLE personel (
+		first_name VARCHAR(20),
+		last_name VARCHAR(20),
+		age INT,
+		hire_date DATE
+	);
+	
+	/* Aynı isimle yeniden bir veritabanı oluşturulmak istenirse hata verir. Bu hatayı
+	almamak için IF NOT EXISTS keywordu kullanılabilir */
+	CREATE TABLE IF NOT EXISTS  personel (
+		first_name VARCHAR(20),
+		last_name VARCHAR(20),
+		age INT,
+		hire_date DATE
+	);
+	
+	/*Veritabanında vacation_plan adında yeni bir tablo oluşturunuz.  Sutun isimleri
+	place_id, country, hotel_name, employee_id, vacation_length,budget 	*/
+
+	CREATE TABLE vacation_plan(
+		place_id INT,
+		country TEXT,
+		hotel_name TEXT,
+		employee_id INT,
+		vacation_lenght INT,
+		budget REAL
+	);
+
+	/*------------------------------------------------------------------------------------------
+	/*  DROP TABLE
+	/*------------------------------------------------------------------------------------------
+	/* personel tablosunu siliniz */
+	DROP TABLE personel;
+	
+	/* Bir tabloyu silerken tablo bulunamazsa hata verir. BU hatayı görememek için
+	IF EXISTS keywordu kullanılabilir.*/
+	DROP TABLE IF EXISTS personel;
+	
+	-- NOT: SQL'de TRUNCATE TABLE komutu bulunmasına karşın SQLite bu komutu 
+	-- desteklememektedir. Truncate komutu  bir tabloyu değil içindeki tüm verileri 
+	-- silmek için kullanılır.
+
+	
+	/*------------------------------------------------------------------------------------------
+	/*  INSERT INTO
+	/*----------------------------------------------------------------------------------------*/
+
+	/* vacation_plan tablosuna 2 kayıt gerçekletiriniz.*/
+	INSERT INTO vacation_plan VALUES(34, 'Turkey', 'Happy Hotel',134, 7, 3000);
+	INSERT INTO vacation_plan VALUES(48, 'Turkey', 'Beach Hotel',100, 10, 5000);
+	
+	-- NOT: Aynı komut tekrar çalıştırılırsa herhangi bir kısıt yoksa ise aynı veriler
+	-- tekrar tabloya girilmiş olur. 
+	
+	/*vacation_plan tablosuna vacation_lenght ve budget sutunlarını eksik olarak veri girişi 
+	yapınız*/
+	INSERT INTO vacation_plan (place_id,	country, hotel_name, employee_id ) 
+	VALUES(35, 'Turkey', 'Comfort Hotel',144);
+	-- NOT : giriş yapılmayan sutunlara NULL atanır.
+	
+	/*------------------------------------------------------------------------------------------
+	/*  CONSTRAINTS - KISITLAMALAR 
+	/*-----------------------------------------------------------------------------------------
+
+	NOT NULL - Bir Sütunun NULL içermemesini garanti eder. 
+
+    UNIQUE - Bir sütundaki tüm değerlerin BENZERSİZ olmasını garanti eder.  
+
+    PRIMARY KEY - Bir sütünün NULL içermemesini ve sütundaki verilerin 
+                  BENZERSİZ olmasını garanti eder.(NOT NULL ve UNIQUE birleşimi gibi)
+
+    FOREIGN KEY - Başka bir tablodaki Primary Key’i referans göstermek için kullanılır. 
+                  Böylelikle, tablolar arasında ilişki kurulmuş olur. 
+
+    DEFAULT - Herhangi bir değer atanmadığında Başlangıç değerinin atanmasını sağlar.
+	/*----------------------------------------------------------------------------------------*/
+	
+	CREATE TABLE workers(
+ id INTEGER PRIMARY KEY,
+	id_number VARCHAR(11) UNIQUE NOT NULL,
+ name TEXT DEFAULT 'NONAME',
+ salary INTEGER NOT NULL
+);
+    
+ INSERT INTO workers VALUES(1, '12345678910','AHMET CAN', 7000 );
+ INSERT INTO workers VALUES( 2, '12345678910', 'MUSTAFA ALİ', 12000);  -- HATA (UNIQUE)
+ INSERT INTO workers  (id,	id_number, salary) VALUES(3, '12345223465', 5000);
+	INSERT INTO workers VALUES(4, '44343323465' , 'AYHAN BAK',NULL) -- HATA (NOT NULL)
+
+	/*vacation_plan tablosunu place_id sutunu PK ve employee_id sutununu ise FK olarak  değiştirirek
+	vacation_plan2 adinda yeni bir tablo oluşturunuz. Bu tablo, employees tablosu ile ilişkili olmalıdır*/ 
+
+	CREATE TABLE vacation_plan2(
+		place_id INT,
+		country TEXT,
+		hotel_name TEXT,
+		employee_id INT,
+		vacation_lenght INT,
+		budget REAL,
+		PRIMARY KEY(place_id),
+		FOREIGN KEY(employee_id) REFERENCES employees(EmployeeId)
+	);
+	/* Employees tablosundaki EmployeeId'si 1 olan kişi için bir tatil planı giriniz.*/
+	INSERT INTO vacation_plan2 VALUES(34,'TR',	'HAPPY HOTEL',1,5,5660);
+	
+	/* Employees tablosunda bulunmayan bir kişi için (EmployeeId=9) olan kişi için bir tatil planı giriniz.*/
+	INSERT INTO vacation_plan2 VALUES(48,'TR',	'COMFORT HOTEL',9,10,7000);  --HATA
+	
+	/*JOIN işlemi ile 2 tablodan veri çekme*/
+	SELECT e.FirstName,e.LastName,v.hotel_name, v.vacation_lenght
+	FROM employees e
+	JOIN vacation_plan2 v
+	ON e.EmployeeId=v.employee_id;
+
+	/*------------------------------------------------------------------------------------------
+	/*  ALTER TABLE (ADD, RENAME TO, DROP)
+	/*  SQLITE MODIFY VE DELETE KOMUTLARINI DOĞRUDAN DESTEKLENMEZ
+	/*------------------------------------------------------------------------------------------
+	
+	/*vacation_plan2 tablosuna name adında ve DEFAULT değeri noname olan 
+	yeni bir sutun ekleyelim */
+	
+	ALTER TABLE vacation_plan2
+	ADD	name TEXT DEFAULT 'noname';
+	
+	/*vacation_plan2 tablosundaki name sutununu siliniz 
+	-- ALTER TABLE vacation_plan2
+	-- DROP COLUMN name ;					
+	
+	/* workers tablosunun adını people olarak değiştiriniz */
+		ALTER TABLE workers
+		RENAME TO people;
+
+	/*------------------------------------------------------------------------------------------
+	/*  UPDATE,DELETE
+		-- SYNTAX
+		----------
+		-- UPDATE tablo_adı
+		-- SET sutun1 = yeni_deger1, sutun2 = yeni_deger2,...  
+		-- WHERE koşul;
+		
+		--DELETE tablo_adı
+		--WHERE koşul;
+   /*-----------------------------------------------------------------------------------------*/
+   
+   /*vacation_plan2 tablosundaki employee_id=1 olan kaydini  hotel_name'ini Komagene Hotel olarak
+   güncelleyiniz.*/
+   
+   UPDATE vacation_plan2
+   SET hotel_name = 'Komagene Hotel'
+   WHERE employee_id = 1;
+   
+   /* people tablosunda salary sutunu 7000 'den az olanların salary(maaşına)
+   %10 zam yapacak sorguyu yazınız*/ 
+   
+   UPDATE people
+   SET salary = salary*1.2
+   WHERE salary &lt; 7000;
+   
+   /*people tablosundaki tüm kayıtkarın salary sutununu 10000 olarak güncelleyiniz */
+   UPDATE people
+   SET salary=10000;
+   
+   /*vacation_plan2 tablosundaki employee_id=1 olan kaydı siliniz*/
+   DELETE FROM vacation_plan2
+   WHERE employee_id=1;
+  
+   
+   
+   </sql><sql name="SQL 3">/*Single-Row Subqueries: 
+
+Write a query to find the maximum duration among the tracks. 
+Your query should include TrackId, Name, Milliseconds. */
+
+SELECT TrackId, name, Milliseconds
+FROM tracks
+where Milliseconds =
+(SELECT max (Milliseconds)
+from tracks);
+
+--Write a query to find the minimum duration among the tracks. 
+--Your query should include TrackId, Name, Milliseconds.
+
+SELECT TrackId, name, Milliseconds
+FROM tracks
+where Milliseconds =
+(SELECT min(Milliseconds)
+from tracks);
+
+
+/*Write a query to find the tracks whose bytes are higher than the average of the bytes 
+of all tracks. Your query should include TrackId, Name, Bytes, general average and 
+should be ordered by Bytes from highest to lowest. General average is the average
+ of all tracks. General average should repeat in every row.
+ (Hint: You need to use two subqueries) */
+ 
+ SELECT TrackId, name, Bytes
+FROM tracks
+where Bytes &gt;
+(SELECT avg(Milliseconds)
+from tracks);
+
+--Multiple-Row Subqueries:
+
+--Write a query that returns the customers whose sales representatives are 
+--Jane Peacock and Margaret Park. Your query should include CustomerID, 
+--First Name and Last Name of the customers.
+
+SELECT CustomerId, FirstName, LastName
+FROM customers
+where SupportRepId 
+in (SELECT EmployeeId
+FROM employees
+WHERE EmployeeId in (3,4));
+
+--Rewrite the subquery above using the JOIN.
+
+SELECT c.CustomerId, c.FirstName, c.LastName
+FROM customers c
+JOIN employees e
+on c.SupportRepId= e.EmployeeId
+WHERE e.EmployeeId in (3,4);
+
+ </sql><sql name="SQL 4"> --DDL (CREATE, ALTER, DELETE) and DML (SELECT, INSERT, UPDATE, DELETE) Statements
+
+--Create a table inside the chinook database. This table tracks the employees’ courses inside 
+--the organization. Your table should have the followings features:
+
+             /*  Name of the table: courses
+               Columns:
+                    CourseId (Primary Key)
+                    CourseName (Cannot be null)
+                    EmployeeId (Foreign Key - Refers to EmployeeId of employees table ) 
+                    CoursePrice */
+			
+CREATE TABLE &quot;courses&quot; (
+	&quot;Course_ID&quot;	VARCHAR(20),
+	&quot;Course_Name&quot;	TEXT NOT NULL,
+	&quot;Employeid&quot;	INT,
+	&quot;Course_Price&quot;	REAL,
+	PRIMARY KEY(&quot;Course_ID&quot;),
+	FOREIGN KEY(&quot;Employeid&quot;) REFERENCES &quot;employees&quot;(&quot;EmployeeId&quot;)
+);
+
+
+ /*   2. Insert at least 5 rows into the courses table. Your EmployeeId should contain the values 
+ of the EmployeeId column on the employees table. You’re free to choose any values for other 
+ columns (CourseId, CourseName, CoursePrice)
+ */
+
+insert INTO courses VALUES(001, 'PYHTON PLUS', 1, 3000 );
+insert INTO courses VALUES(002, 'HTML', 2, 2500 );
+insert INTO courses VALUES(003, 'CSS', 3, 2750 );
+insert INTO courses VALUES(004, 'SQLITE', 4, 3500 );
+insert INTO courses VALUES(005, 'JIRA', 5, 2000 );
+insert INTO courses VALUES(006, 'AGILE', 6, 2350 );
+insert INTO courses VALUES(007, 'NETWORK', 7, 2250);
+insert INTO courses VALUES(008, 'LINUX', 8, 2500 );
+
+/*
+Delete the last row of your courses table.
+*/
+
+DELETE FROM courses
+WHERE employee_id=8
+
+/*Add a new column to your courses table named StartDate. 
+The new column cannot be null. */
+ALTER TABLE courses
+add StartDATE INT  NOT NULL ;
+
+/*
+Delete the CoursePrice column.
+*/
+ALTER TABLE courses
+DROP COLUMN Course_Price
+
+--Delete the courses table.
+-drop TABLE courses
+
+</sql><sql name="SQL 6">
+CREATE TABLE &quot;vacation_plan&quot; (
+place_id INTEGER,
+country TEXT,
+hotel_name TEXT,
+employee_id INTEGER,
+vacation_lenght INT,
+budget REAL
+); 
+------------------------------------------------
+
+insert INTO vacation_plan VALUES(48, 'TR', 'HAPPY HOTEL', 1, 7, 4500 );
+insert INTO vacation_plan VALUES(07, 'TR', 'HOTEL SERA', 2, 5, 3500 );
+insert INTO vacation_plan VALUES(34, 'TR', 'ERESIN HOTEL', 1, 3, 2500 );
+insert INTO vacation_plan VALUES(48, 'TR', 'HAPPY HOTEL', 1, 7, NULL );
+-----------------------------------------------
+
+ALTER TABLE vacation_plan
+ADD is_basi TEXT ;
+
+ALTER TABLE vacation_plan
+DROP COLUMN is_basi ;
+
+
+DELETE from vacation_plan
+WHERE employee_id=8 ;</sql><current_tab id="2"/></tab_sql></sqlb_project>
